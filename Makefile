@@ -10,7 +10,7 @@ lint:
 check: test lint
 
 collectstatic:
-	uv run manage.py collectstatic
+	uv run manage.py collectstatic --noinput
 
 migrate:
 	uv run manage.py makemigrations
