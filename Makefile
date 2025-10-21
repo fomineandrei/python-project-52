@@ -7,7 +7,8 @@ run:
 lint:
 	uv run ruff check
 
-check: test lint
+check: 
+	test lint
 
 collectstatic:
 	uv run manage.py collectstatic --noinput
