@@ -1,9 +1,6 @@
 install:
 	uv sync
 
-run:
-	uv run task_manager
-
 lint:
 	uv run ruff check
 
