@@ -8,5 +8,5 @@ coverage.xml
 coverage.lcov
 .env
 .ruff_cache/
-static/
+staticfiles/
 bootstrap-5.1.3-examples/
