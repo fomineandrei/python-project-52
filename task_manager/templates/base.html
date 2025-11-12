@@ -5,7 +5,7 @@
 {% get_current_language as LANGUAGE_CODE %}
 {% bootstrap_setting "color_mode" as COLOR_MODE %}
 {% bootstrap_setting "javascript_in_head" as BOOTSTRAP_JAVASCRIPT_IN_HEAD %}
-<html lang="{{ LANGUAGE_CODE|default:'en_us' }}"{% if COLOR_MODE %} data-bs-theme="{{ COLOR_MODE }}"{% endif %}>
+<html lang="{{ LANGUAGE_CODE|default:'ru' }}"{% if COLOR_MODE %} data-bs-theme="{{ COLOR_MODE }}"{% endif %}>
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
@@ -21,9 +21,25 @@
 </head>
 
 <body class="min-vh-100 d-flex flex-column">
-{% block bootstrap5_before_content %}{% endblock %}
+{% block bootstrap5_header %}
+  {% if user.auth %}
+    {% include "header_auth.html" %}
+  {% else %}
+    {% include "header_not_auth.html" %}
+  {% endif %}
+{% endblock %}
+
 {% block bootstrap5_content %} CONTENT {% endblock %}
-{% block bootstrap5_after_content %}{% endblock %}
+
+{% block bootstrap5_footer %}
+<div class="container">
+  <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+    <div class="col-md-4 d-flex align-items-center">
+      <a href="https://ru.hexlet.io/">Hexlet</a>
+    </div>
+  </footer>
+</div>
+{% endblock %}
 <!-- Bootstrap JavaScript if it is in body -->
 {% if not BOOTSTRAP_JAVASCRIPT_IN_HEAD %}{% bootstrap_javascript %}{% endif %}
 
