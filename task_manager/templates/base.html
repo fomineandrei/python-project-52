@@ -25,13 +25,19 @@
   {% if user.auth %}
     {% include "header_auth.html" %}
   {% else %}
-    {% include "header_not_auth.html" %}
+    {% include "header_base.html" %}
   {% endif %}
 {% endblock %}
 
-{% block bootstrap5_content %} CONTENT {% endblock %}
+
+<main class="container flex-grow-1">
+  {% bootstrap_messages %}
+
+  {% block bootstrap5_content %} CONTENT {% endblock %}
+</main>
 
 {% block bootstrap5_footer %}
+
 <div class="container">
   <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
     <div class="col-md-4 d-flex align-items-center">

@@ -1,15 +1,9 @@
-from django.shortcuts import render
-from django.utils.translation import gettext as _
 
-class User:
-    pass
+from django.views.generic.base import TemplateView
 
 
-def index(request):
-    user = User()
-    user.auth = 0
-    return render(
-        request,
-        "index.html",
-        context={'user': user}
-    )
+class IndexView(TemplateView):
+    template_name = 'index.html'
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(**kwargs)
