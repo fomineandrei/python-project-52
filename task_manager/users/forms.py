@@ -12,12 +12,17 @@ class UserRegistrationForm(UserCreationForm):
             'first_name',
             'last_name',
             'username'
-        ]
-
-    def clean_username(self):
-        raise ValidationError('!!!!!!!!!!!!!!!!!!!')
-        return super().clean()
+        ]    
     
+    def clean_password2(self):
+        password2 = self.cleaned_data['password2']
+        if password2 == '111':
+            self.add_error('password2', ValidationError('Password2Error'))
+        return password2
+    
+    def clean(self):
+        return super().clean()
+        
 
 class UserLoginForm(ModelForm):
 
