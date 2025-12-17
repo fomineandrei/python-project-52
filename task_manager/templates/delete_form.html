@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load django_bootstrap5 %}
+
+
+{% block bootstrap5_content %}
+<h1 class="mb-4">{{ h1 }}</h1>
+<p class="my-3">{{ delete_warning }}</p>
+<form method="post">
+    {% csrf_token %}
+    <input class="btn btn-danger" type="submit" value="{{ submit_button }}">
+</form>
+{% endblock %}

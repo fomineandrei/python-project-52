@@ -4,6 +4,9 @@ install:
 lint:
 	uv run ruff check
 
+test:
+	uv run manage.py test --verbosity 2
+
 check: 
 	test lint
 

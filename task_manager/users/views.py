@@ -1,49 +1,94 @@
 from django.contrib import messages
-from django.shortcuts import render
+from django.contrib.auth.views import LoginView, LogoutView
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic.base import TemplateView, View
-from django.views.generic.edit import CreateView
+from django.utils.translation import gettext_lazy as _
+from django.views.generic import ListView
+from django.views.generic.edit import CreateView, DeleteView, UpdateView
 
+from task_manager.mixins import (
+    FormContextMixin,
+    FormValidMixin,
+    PermissionMixin,
+)
 from task_manager.users import forms, models
 
 # Create your views here.
 
 
-class IndexView(TemplateView):
-    template_name = 'base.html'
+class IndexView(FormContextMixin, ListView):
+    model = models.User
+    context_object_name = 'users'
+    template_name = 'users/index.html'
+    queryset = models.User.objects.all().order_by('id')
+    h1 = _('Пользователи')
 
 
-class CreateUserView(CreateView):
+class CreateUserView(FormContextMixin, FormValidMixin, CreateView):
     model = models.User
     form_class = forms.UserRegistrationForm
-    template_name = 'users/create_user.html'
+    template_name = 'base_form.html'
     success_url = reverse_lazy('login_user')
-
-    def post(self, request, *args, **kwargs):
-        response = super().post(request, *args, **kwargs)
-        messages.success(request, self.get_form()['username'].errors)
-        messages.success(request, self.get_form()['password2'].errors)
-        return response
+    success_message = _('Пользователь успешно зарегистрирован')
+    h1 = _('Регистрация')
+    submit_button = _('Зарегистрировать')
 
 
-class UpdateUserView(TemplateView):
-    pass
-
-
-class DeleteUserView(TemplateView):
-    pass
-
-
-class LoginUserView(View):
-
-    def get(self, request, *args, **kwargs):
-        form = forms.UserLoginForm()
-        return render(
-            request,
-            'users/create_user.html',
-            context={'form': form}
+class UpdateUserView(FormContextMixin, FormValidMixin,
+                     PermissionMixin, UpdateView):
+    template_name = 'base_form.html'
+    model = models.User
+    form_class = forms.UserUpdateForm
+    success_url = reverse_lazy('index_users')
+    h1 = _('Изменение пользователя')
+    submit_button = _('Изменить')
+    success_message = _('Пользователь успешно изменен')
+    not_auth_message = _('Вы не авторизованы! Пожалуйста, выполните вход.')
+    another_user_message = _(
+        'У вас нет прав для изменения другого пользователя.'
         )
 
 
-class LogoutUserView(TemplateView):
-    pass
+class DeleteUserView(FormContextMixin, PermissionMixin, DeleteView):
+    model = models.User
+    success_url = reverse_lazy('index')
+    template_name = 'delete_form.html'
+    h1 = _('Удаление пользователя')
+    submit_button = _('Да, удалить')
+    not_auth_message = _('Вы не авторизованы! Пожалуйста, выполните вход.')
+    another_user_message = _(
+        'У вас нет прав для изменения другого пользователя.'
+        )
+
+    def get_delete_warning(self):
+        full_name = self.get_object().get_full_name()
+        return _(
+            'Вы уверены, что хотите удалить {name}?'.format(name=full_name)
+            )
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            response = super().post(request, *args, **kwargs)
+            messages.success(request, _('Пользователь успешно удален'))
+            return response
+        except Exception as e:
+            messages.error(request, e)
+            return redirect('index_users')
+
+
+class LoginUserView(FormContextMixin, FormValidMixin, LoginView):
+    form_class = forms.UserLoginForm
+    template_name = 'base_form.html'
+    next_page = reverse_lazy('index')
+    success_message = _('Вы залогинены')
+    h1 = _('Вход')
+    submit_button = _('Войти')
+
+
+class LogoutUserView(FormValidMixin, LogoutView):
+    next_page = reverse_lazy('index')
+    
+    def post(self, request, *args, **kwargs):
+        response = super().post(request, *args, **kwargs)
+        messages.info(self.request, _('Вы разлогинены'))
+        return response

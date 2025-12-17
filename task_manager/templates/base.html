@@ -22,7 +22,7 @@
 
 <body class="min-vh-100 d-flex flex-column">
 {% block bootstrap5_header %}
-  {% if user.auth %}
+  {% if user.is_authenticated %}
     {% include "header_auth.html" %}
   {% else %}
     {% include "header_base.html" %}

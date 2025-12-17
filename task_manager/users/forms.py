@@ -1,5 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm
-from django.forms import ModelForm, ValidationError
+from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
 from task_manager.users.models import User
 
@@ -12,20 +11,21 @@ class UserRegistrationForm(UserCreationForm):
             'first_name',
             'last_name',
             'username'
-        ]    
-    
-    def clean_password2(self):
-        password2 = self.cleaned_data['password2']
-        if password2 == '111':
-            self.add_error('password2', ValidationError('Password2Error'))
-        return password2
-    
-    def clean(self):
-        return super().clean()
+        ]
         
 
-class UserLoginForm(ModelForm):
+class UserLoginForm(AuthenticationForm):
 
     class Meta:
         model = User
-        fields = ['username', 'password']
+        fields = [
+            'username',
+            'password'
+        ]
+
+
+class UserUpdateForm(UserRegistrationForm):
+
+    def clean_username(self):
+        username = self.cleaned_data.get('username')
+        return username
