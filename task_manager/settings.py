@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'task_manager',
     'task_manager.users',
+    'task_manager.statuses',
     'django_bootstrap5'
 ]
 
@@ -96,7 +97,6 @@ DATABASES = {
 
 # User model
 AUTH_USER_MODEL = 'users.User'
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

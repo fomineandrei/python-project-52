@@ -9,7 +9,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from task_manager.mixins import (
     FormContextMixin,
     FormValidMixin,
-    PermissionMixin,
+    OwnerAccessMixin,
 )
 from task_manager.users import forms, models
 
@@ -34,8 +34,8 @@ class CreateUserView(FormContextMixin, FormValidMixin, CreateView):
     submit_button = _('Зарегистрировать')
 
 
-class UpdateUserView(FormContextMixin, FormValidMixin,
-                     PermissionMixin, UpdateView):
+class UpdateUserView(OwnerAccessMixin, FormContextMixin,
+                     FormValidMixin, UpdateView):
     template_name = 'base_form.html'
     model = models.User
     form_class = forms.UserUpdateForm
@@ -49,7 +49,7 @@ class UpdateUserView(FormContextMixin, FormValidMixin,
         )
 
 
-class DeleteUserView(FormContextMixin, PermissionMixin, DeleteView):
+class DeleteUserView(OwnerAccessMixin, FormContextMixin, DeleteView):
     model = models.User
     success_url = reverse_lazy('index')
     template_name = 'delete_form.html'
@@ -80,6 +80,7 @@ class LoginUserView(FormContextMixin, FormValidMixin, LoginView):
     form_class = forms.UserLoginForm
     template_name = 'base_form.html'
     next_page = reverse_lazy('index')
+    app_index_url = reverse_lazy('index_users')
     success_message = _('Вы залогинены')
     h1 = _('Вход')
     submit_button = _('Войти')

@@ -23,7 +23,7 @@ class UserTest(TestCase):
         response = self.client.get(url)
 
         self.assertIn('users', response.context)
-        self.assertIn(self.user.username.encode(), response.content)
+        self.assertContains(response, 'Test')
 
     def test_user_create(self):
 
@@ -41,11 +41,12 @@ class UserTest(TestCase):
         response = self.client.get(reverse('index_users'))
 
         self.assertContains(response, 'NewTest')
+        self.assertContains(response, 'NewImya')
 
     def test_user_update(self):
-
         update_url = reverse('update_user', kwargs={'pk': self.user.id})
         list_url = reverse('index_users')
+        self.client.force_login(self.user)
 
         self.client.post(update_url,
                          data={
@@ -63,6 +64,7 @@ class UserTest(TestCase):
         self.assertNotContains(response, 'Test')
 
     def test_user_delete(self):
+        self.client.force_login(self.user)
 
         delete_url = reverse('delete_user', kwargs={'pk': self.user.id})
         list_url = reverse('index_users')
