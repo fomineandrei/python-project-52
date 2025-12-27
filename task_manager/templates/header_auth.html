@@ -11,7 +11,7 @@
   <a class="nav-link" href="#">{% trans "Метки" %}</a>
 </li>
 <li class="nav-item">
-  <a class="nav-link" href="#">{% trans "Задачи" %}</a>
+  <a class="nav-link" href="{% url 'index_tasks' %}">{% trans "Задачи" %}</a>
 </li>
 <li class="nav-item">
   <form action="{% url 'logout_user' %}" method="post">

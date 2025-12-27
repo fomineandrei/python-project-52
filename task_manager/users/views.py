@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.views import LoginView, LogoutView
+from django.db.models import ProtectedError
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
@@ -40,6 +41,7 @@ class UpdateUserView(OwnerAccessMixin, FormContextMixin,
     model = models.User
     form_class = forms.UserUpdateForm
     success_url = reverse_lazy('index_users')
+    access_denied_redirect = reverse_lazy('index_users')
     h1 = _('Изменение пользователя')
     submit_button = _('Изменить')
     success_message = _('Пользователь успешно изменен')
@@ -52,6 +54,7 @@ class UpdateUserView(OwnerAccessMixin, FormContextMixin,
 class DeleteUserView(OwnerAccessMixin, FormContextMixin, DeleteView):
     model = models.User
     success_url = reverse_lazy('index')
+    access_denied_redirect = reverse_lazy('index_users')
     template_name = 'delete_form.html'
     h1 = _('Удаление пользователя')
     submit_button = _('Да, удалить')
@@ -71,6 +74,11 @@ class DeleteUserView(OwnerAccessMixin, FormContextMixin, DeleteView):
             response = super().post(request, *args, **kwargs)
             messages.success(request, _('Пользователь успешно удален'))
             return response
+        except ProtectedError:
+            messages.error(request,
+                _('Невозможно удалить пользователя,'
+                ' потому что он используется'))
+            return redirect('index_users')
         except Exception as e:
             messages.error(request, e)
             return redirect('index_users')

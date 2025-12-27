@@ -47,7 +47,7 @@ class UpdateStatusView(AuthRequiredMixin, FormValidMixin,
     form_class = CreateStatusForm
     success_url = reverse_lazy('index_statuses')
     login_url = reverse_lazy('login_user')
-    h1 = _('Изменение татуса')
+    h1 = _('Изменение статуса')
     submit_button = _('Изменить')
     success_message = _('Статус успешно изменен')
     not_auth_message = _('Вы не авторизованы! Пожалуйста, выполните вход.')
@@ -75,7 +75,7 @@ class DeleteStatusView(AuthRequiredMixin, FormContextMixin, DeleteView):
             return response
         except ProtectedError:
             messages.error(request,
-                    _('Невозможно удалить статус, потому что он используется'))
+                _('Невозможно удалить статус, потому что он используется'))
             return redirect('index_statuses')
         except Exception as e:
             messages.error(request, e)

@@ -35,13 +35,57 @@ class AuthRequiredMixin(LoginRequiredMixin):
 
 
 class OwnerAccessMixin(AuthRequiredMixin):
+    def get_owner_id(self, pk):
+        current_model = self.model
+        if current_model.__name__ == 'User':
+            return pk
+        model_object = current_model.objects.get(id=pk)
+        try:
+            return model_object.author.id
+        except AttributeError:
+            return 'IncorrectId'
+
     def dispatch(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             return super().handle_no_permission()
-        if request.user.id != kwargs.get('pk'):
+        pk = kwargs.get('pk')
+        owner_id = self.get_owner_id(pk)
+        if request.user.id != owner_id:
             messages.error(request, self.another_user_message)
-            return redirect(self.app_index_url)
+            return redirect(self.access_denied_redirect)
         return super().dispatch(request, args, kwargs)
+    
+
+class FilterMixin:
+    def get_form_params(self):
+        """ Можно переопределить метод во view для данных нужной 
+         вам формы.
+          Должен возвращать словарь с параметрами фильтрации. """
+        active_filters = {}
+        for key, val in self.filter_form.cleaned_data.items():
+            if val:
+                active_filters[key] = val        
+        if active_filters.get('author_id'):
+            active_filters['author_id'] = self.request.user.id
+        return active_filters
+
+    def filter(self):
+        form_params = self.get_form_params()
+        self.queryset = self.queryset.filter(**form_params)
+
+    def get(self, request, *args, **kwargs):
+        if request.GET:
+            self.filter_form = self.filter_form(request.GET)
+            self.filter_form.is_valid()
+            self.filter()
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.filter_form
+        return context
+
+
 
         
 
