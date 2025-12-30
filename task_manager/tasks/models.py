@@ -21,7 +21,16 @@ class Task(models.Model):
     status = models.ForeignKey('statuses.Status',
                                on_delete=models.PROTECT,
                                verbose_name=_('статус'))
+    labels = models.ManyToManyField('labels.Label',
+                                    through='TasksToLabels',
+                                    verbose_name=_('метки'),
+                                    blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return f'{self.name}'
+    
+
+class TasksToLabels(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    label = models.ForeignKey('labels.Label', on_delete=models.PROTECT)

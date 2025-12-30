@@ -82,6 +82,6 @@ class DeleteTaskView(OwnerAccessMixin, FormContextMixin, DeleteView):
 class InfoTaskView(AuthRequiredMixin, FormContextMixin, DetailView):
     model = Task
     context_object_name = 'task'
-    h1 = 'kdslslkg'
+    h1 = _('Просмотр задачи')
     template_name = 'tasks/detail.html'
     
