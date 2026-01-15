@@ -64,7 +64,7 @@ class FilterMixin:
         active_filters = {}
         for key, val in self.filter_form.cleaned_data.items():
             if val:
-                active_filters[key] = val        
+                active_filters[key] = int(val)        
         if active_filters.get('author_id'):
             active_filters['author_id'] = self.request.user.id
         return active_filters
@@ -74,22 +74,13 @@ class FilterMixin:
         self.queryset = self.queryset.filter(**form_params)
 
     def get(self, request, *args, **kwargs):
-        if request.GET:
-            self.filter_form = self.filter_form(request.GET)
-            self.filter_form.is_valid()
-            self.filter()
+        self.filter_form = self.filter_form(request.GET)
+        self.filter_form.update_choices()
+        self.filter_form.is_valid()
+        self.filter()
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = self.filter_form
         return context
-
-
-
-        
-
-
-    
-
-

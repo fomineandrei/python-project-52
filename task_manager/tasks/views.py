@@ -26,7 +26,7 @@ class IndexTasksView(AuthRequiredMixin, FilterMixin,
     filter_form = TasksFilterForm
     login_url = reverse_lazy('login_user')
     h1 = _('Задачи')
-    submit_button = _('Создать Задачу')
+    submit_button = _('Создать задачу')
     not_auth_message = _('Вы не авторизованы! Пожалуйста, выполните вход.')
 
 

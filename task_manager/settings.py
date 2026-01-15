@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True if os.getenv('DEBUG_APP') == '1' else False
 
 ALLOWED_HOSTS = ['webserver', 'localhost', os.getenv('CURRENT_HOST')]
 
@@ -48,8 +48,8 @@ INSTALLED_APPS = [
     'task_manager',
     'task_manager.users',
     'task_manager.statuses',
-    'task_manager.tasks',
     'task_manager.labels',
+    'task_manager.tasks',
     'django_bootstrap5'
 ]
 
@@ -62,7 +62,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.middleware.locale.LocaleMiddleware'
+    'django.middleware.locale.LocaleMiddleware',
+    'rollbar.contrib.django.middleware.RollbarNotifierMiddleware'
 ]
 
 ROOT_URLCONF = 'task_manager.urls'
@@ -89,13 +90,19 @@ WSGI_APPLICATION = 'task_manager.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.parse(
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    },
+}
+
+if os.getenv('DATABASE_URL'):
+    db = dj_database_url.parse(
         os.getenv('DATABASE_URL'),
         conn_max_age=600,
         conn_health_checks=True
     )
-}
-
+    DATABASES['default'].update(db)
 
 # User model
 AUTH_USER_MODEL = 'users.User'
@@ -118,6 +125,12 @@ PASSWORD_HASHERS = [
     'django.contrib.auth.hashers.PBKDF2PasswordHasher',
 ]
 
+ROLLBAR = {
+    'access_token': 'a1e65cb5349244ecb4d498165a51f0bc',
+    'environment': 'development' if DEBUG else 'production',
+    'code_version': '1.0',
+    'root': BASE_DIR,
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
