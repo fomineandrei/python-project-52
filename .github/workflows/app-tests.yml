@@ -23,6 +23,7 @@ jobs:
           curl -LsSf https://astral.sh/uv/install.sh | sh
           make install
       - name: Run linter and pytest
+        env: DEBUG: '1'
         run: |
           make lint
           make test
