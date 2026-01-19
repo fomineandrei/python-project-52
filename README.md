@@ -2,7 +2,7 @@
 [![Actions Status](https://github.com/fomineandrei/python-project-52/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/fomineandrei/python-project-52/actions)
 
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=fomineandrei_python-project-52&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=fomineandrei_python-project-52)
-[![Linter Check](https://github.com/fomineandrei/python-project-83/actions/workflows/linter.yml/badge.svg)](https://github.com/fomineandrei/python-project-83/actions/workflows/linter.yml)
+[![LinterAndTests](https://github.com/fomineandrei/python-project-52/actions/workflows/app-tests.yml/badge.svg)](https://github.com/fomineandrei/python-project-52/actions/workflows/app-tests.yml)
 
 
 # Task Manager app
