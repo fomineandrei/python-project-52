@@ -5,7 +5,7 @@
 
 # Task Manager app
 ### This app is task management system built with Django and Python.
-### This application provides a comprehensive solution for organizing, tracking, and managing tasks in a collaborative environment. ### The system implements user authentication, role-based access control, and flexible task organization using statuses and labels.
+### This application provides a comprehensive solution for organizing, tracking, and managing tasks in a collaborative environment.### The system implements user authentication, role-based access control, and flexible task organization using statuses and labels.
 
 ## Technologies Used:
 | Tool          |                          Info url                                             |
