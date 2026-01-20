@@ -13,8 +13,11 @@ check:
 collectstatic:
 	uv run manage.py collectstatic --clear --noinput
 
-migrate:
+migrations:
 	uv run manage.py makemigrations
+
+migrate:
+	uv run manage.py migrate
 
 build:
 	./build.sh

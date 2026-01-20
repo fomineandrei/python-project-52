@@ -9,4 +9,4 @@ coverage.lcov
 .env
 .ruff_cache/
 staticfiles/
-bootstrap-5.1.3-examples/
+static/
