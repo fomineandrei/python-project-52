@@ -28,7 +28,7 @@ class TasksFilterForm(Form):
     labels = ChoiceField(
         choices=[default], label=_('Метка'), required=False)
     author_id = BooleanField(
-        label=_('Только мои задачи'), required=False)
+        label=_('Только свои задачи'), required=False)
   
     def update_choices(self):
         self.fields['status'].choices = [self.default] + \
