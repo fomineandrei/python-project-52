@@ -1,4 +1,4 @@
-name: my tests
+name: PythonCI
 
 on:
   - push
