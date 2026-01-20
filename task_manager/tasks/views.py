@@ -1,3 +1,5 @@
+from django.contrib import messages
+from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import ListView
@@ -77,6 +79,15 @@ class DeleteTaskView(OwnerAccessMixin, FormContextMixin, DeleteView):
         return _(
             'Вы уверены, что хотите удалить {name}?'.format(name=status_name)
             )
+    
+    def post(self, request, *args, **kwargs):
+        try:
+            response = super().post(request, *args, **kwargs)
+            messages.success(request, self.success_message)
+            return response
+        except Exception as e:
+            messages.error(request, e)
+            return redirect('index_tasks')
 
 
 class InfoTaskView(AuthRequiredMixin, FormContextMixin, DetailView):
