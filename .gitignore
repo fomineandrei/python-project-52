@@ -9,3 +9,4 @@ coverage.lcov
 .env
 .ruff_cache/
 static/
+hexlet_code.egg-info/

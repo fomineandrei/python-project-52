@@ -53,7 +53,7 @@ class UpdateUserView(OwnerAccessMixin, FormContextMixin,
 
 class DeleteUserView(OwnerAccessMixin, FormContextMixin, DeleteView):
     model = models.User
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('index_users')
     access_denied_redirect = reverse_lazy('index_users')
     template_name = 'delete_form.html'
     h1 = _('Удаление пользователя')
