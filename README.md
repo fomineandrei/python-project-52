@@ -73,4 +73,4 @@ make test
 ```
 
 ## Пример работы приложения можно посмотреть по ссылке:
-### [https://python-project-52-ary4.onrender.com/](https://python-project-52-ary4.onrender.com/)
+### [https://python-project-52-8uwo.onrender.com](https://python-project-52-8uwo.onrender.com)
