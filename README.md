@@ -56,13 +56,13 @@ make start
 ## For developers
 ### Start development server with debug mode:
 ### 1. Change .env file:
-'''
+```
 DEBUG=1
-'''
+```
 ### 2. Run app with command:
-'''
+```
 make dev
-'''
+```
 ### 3. Open your browser and enter this url: http://localhost:8000
 
 ## Tests:
