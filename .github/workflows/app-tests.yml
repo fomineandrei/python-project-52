@@ -20,7 +20,8 @@ jobs:
         # make depends on poetry
       - name: Install dependencies
         run: |
-          make build
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          make install
       - name: Run linter and pytest
         env: 
           DEBUG: 1
@@ -28,3 +29,18 @@ jobs:
         run: |
           make lint
           make test
+      - name: Make coverage .xml
+        run:
+          make test-coverage
+
+      - name: SonarQubeScan
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=fomineandrrei_python-project-52
+            -Dsonar.organization=fomineandrei
+            -Dsonar.python.coverage.reportPaths=coverage.xml
+            -Dsonar.coverage.exclusions=tests/**
+            -Dsonar.exclusions=tests/**

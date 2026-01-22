@@ -5,7 +5,10 @@ lint:
 	uv run ruff check
 
 test:
-	uv run manage.py test --verbosity 2
+	uv run pytest
+
+test-coverage:
+	uv run pytest --cov=task_manager --cov-report=xml:coverage.xml
 
 check: 
 	test lint
