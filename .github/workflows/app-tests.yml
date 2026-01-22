@@ -29,8 +29,6 @@ jobs:
         run: |
           make lint
           make test
-      - name: Make coverage .xml
-        run:
           make test-coverage
 
       - name: SonarQubeScan
